@@ -70,8 +70,14 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         FirebaseUser user = task.getResult().getUser();
                                         String mUserId = user.getUid();
-                                        mDatabase.child("users").child(mUserId).child("profile").push().child("firstname").setValue(fname);
-                                        mDatabase.child("users").child(mUserId).child("profile").push().child("lastname").setValue(lname);
+                                        mDatabase.child("users").child(mUserId).child("profile").push().child("FirstName").setValue(fname);
+                                       mDatabase.child("users").child(mUserId).child("profile").push().child("LastName").setValue(lname);
+                                       // User newuser = new User(fname,lname);
+                                    //    Log.w("Hello", newuser.FirstName);
+                                      //  mDatabase.child("users").child(mUserId).child("profile").push().child("username").setValue(newuser);
+
+
+
                                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -53,7 +53,52 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mUserId = mFirebaseUser.getUid();
 
-            // Set up ListView
+/*          mDatabase.addValueEventListener(new ValueEventListener() {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    TextView welcome= (TextView) findViewById(R.id.welcome);
+                    String theuser = (String)dataSnapshot.child("users").child(mUserId).child("profile").child("FirstName").getValue();
+                    Log.w("Name", theuser);
+                    welcome.setText(theuser);
+                }
+
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });*/
+
+/*            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    TextView welcome= (TextView) findViewById(R.id.welcome);
+                    String theuser = (String)dataSnapshot.child("User").getValue();
+                    welcome.setText(theuser);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });*/
+
+
+/*            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    TextView welcome= (TextView) findViewById(R.id.welcome);
+                    String theuser = (String)dataSnapshot.child("users").child(mUserId).child("profile").child("FirstName").getValue();
+                    welcome.setText(theuser);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });*/
+
+
+
+
+                // Set up ListView
             final ListView listView = (ListView) findViewById(R.id.listView);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
             listView.setAdapter(adapter);
@@ -95,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+            // Deletes items when clicked
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     mDatabase.child("users").child(mUserId).child("items")
@@ -116,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                             });
                 }
             });
+
+
         }
 
     }
