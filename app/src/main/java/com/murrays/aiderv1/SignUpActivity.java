@@ -70,12 +70,13 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         FirebaseUser user = task.getResult().getUser();
                                         String mUserId = user.getUid();
-                                        mDatabase.child("users").child(mUserId).child("profile").push().child("FirstName").setValue(fname);
-                                       mDatabase.child("users").child(mUserId).child("profile").push().child("LastName").setValue(lname);
+                                        mDatabase.child("users").child(mUserId).child("profile").child("FirstName").setValue(fname);
+                                       mDatabase.child("users").child(mUserId).child("profile").child("LastName").setValue(lname);
                                        // User newuser = new User(fname,lname);
-                                    //    Log.w("Hello", newuser.FirstName);
-                                      //  mDatabase.child("users").child(mUserId).child("profile").push().child("username").setValue(newuser);
-
+                                   //     User newuser = new User("Steph","Murray");
+                                  //      Log.d("Test","hi");
+                                    //    Log.d("Hello", newuser.FirstName);
+                                      //  mDatabase.child("users").child(mUserId).child("profile").push().child("uname").setValue(newuser);
 
 
                                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

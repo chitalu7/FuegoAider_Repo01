@@ -1,32 +1,35 @@
 package com.murrays.aiderv1;
 
-import com.google.firebase.database.PropertyName;
-
 public class User {
     public String FirstName;
     public String LastName;
 
-    public User(String fname, String lname){
-        this.FirstName = fname;
-        this.LastName = lname;
+    public User() {
     }
 
-    @PropertyName("FirstName")
-    public String GetFirstName() {
+    public String getFirstName() {
         return FirstName;
     }
 
-    public void setFirstName(String firstname) {
-        this.FirstName = firstname;
+    public void setFirstName(String name) {
+        FirstName = name;
     }
-    @PropertyName("LastName")
-    public String GetLastName() {
+    public String getLastName() {
         return LastName;
     }
 
-    public void setLastName(String lastname) {
-        this.LastName = lastname;
+    public void setLastName(String name) {
+        LastName = name;
     }
 
 
+
+
+    public User(String fname, String lname) {
+        FirstName = fname;
+        LastName = lname;
+
+    }
+
 }
+

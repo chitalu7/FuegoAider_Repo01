@@ -2,6 +2,7 @@ package com.murrays.aiderv1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private String mUserId;
+    private String userFname;
 
 
     @Override
@@ -53,47 +56,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mUserId = mFirebaseUser.getUid();
 
-/*          mDatabase.addValueEventListener(new ValueEventListener() {
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    TextView welcome= (TextView) findViewById(R.id.welcome);
-                    String theuser = (String)dataSnapshot.child("users").child(mUserId).child("profile").child("FirstName").getValue();
-                    Log.w("Name", theuser);
-                    welcome.setText(theuser);
-                }
 
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });*/
-
-/*            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    userFname = (String)dataSnapshot.child("FirstName").getValue();
                     TextView welcome= (TextView) findViewById(R.id.welcome);
-                    String theuser = (String)dataSnapshot.child("User").getValue();
-                    welcome.setText(theuser);
+                    welcome.setText("Welcome " + userFname);
+
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w("Error", "Failed to read value.", error.toException());
                 }
-            });*/
-
-
-/*            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    TextView welcome= (TextView) findViewById(R.id.welcome);
-                    String theuser = (String)dataSnapshot.child("users").child(mUserId).child("profile").child("FirstName").getValue();
-                    welcome.setText(theuser);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });*/
+            });
 
 
 
