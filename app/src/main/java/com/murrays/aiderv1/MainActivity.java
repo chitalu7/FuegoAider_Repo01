@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,17 +20,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.murrays.aiderv1.databinding.ActivityMainBinding;
+//import com.murrays.aiderv1.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+   // private ActivityMainBinding binding;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private String mUserId;
     private String userFname;
+    private String mFamilyID;
 
 
     @Override
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
@@ -57,10 +61,52 @@ public class MainActivity extends AppCompatActivity {
                     userFname = (String)dataSnapshot.child("FirstName").getValue();
                     TextView welcome= (TextView) findViewById(R.id.welcome);
                     welcome.setText("Welcome " + userFname);
+                    mFamilyID =  dataSnapshot.child("FamilyID").getValue(String.class);
 
                     TextView userinfo = (TextView) findViewById(R.id.userinfo);
 
-                    userinfo.setText("Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+" Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
+                    userinfo.setText( getString(R.string.new_line)+ "Here is some of the data we currently have for you: "+ getString(R.string.new_line)+"Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+"Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
+
+
+                    //Seed some data for other nodes
+
+                    // Family Data Seeding - only done once for prototype purposes
+
+                  //  mDatabase.child("family").child("familyID").setValue(mFamilyID);
+
+                    // Calender Data Seeding - each family has calendar - Datetime acts as key. must be unique - only done once for prototype purposes
+
+                  //Calendar calendar = Calendar.getInstance();
+                //   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
+                  //  String calendaritemDate = simpleDateFormat.format(calendar.getTime()).toString();
+                  //  String calendaritemDate = "290520221700";
+
+
+                 //   String calendaritemDescr = "Daughter Coming Over to Grandma's House";
+                 //   String calendaritemNotes = "I will bring cake";
+
+
+                  //  Log.d("Date", calendaritemDate);
+                  //  mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(calendaritemDate).child("Description").setValue(calendaritemDescr);
+                 //  mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(calendaritemDate).child("Notes").setValue(calendaritemNotes);
+
+                //Family Notifications- Seed some data for notifications, which will come under the banner of family groups - only done once for prototype purposes
+
+                /*   Calendar calendar = Calendar.getInstance();
+                       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
+                      String calendaritemDate = simpleDateFormat.format(calendar.getTime()).toString();
+                      String logdata = "We can put any data coming from sensor relating to event that we want to log here.";
+
+
+                  String not1 ="Family member Emily has fallen. Please check in to see if they are ok";
+                  String not2 ="Family member Richard has added something to the family calendar";
+                    String notID = mDatabase.child("family").child("familyID").child(mFamilyID).child("Notifications").push().getKey();
+                    mDatabase.child("family").child("familyID").child(mFamilyID).child("Notifications").child(notID).child("Time").setValue(calendaritemDate);
+                    mDatabase.child("family").child("familyID").child(mFamilyID).child("Notifications").child(notID).child("NotificationText").setValue(not2);
+                    mDatabase.child("family").child("familyID").child(mFamilyID).child("Notifications").child(notID).child("LogData").setValue(logdata);
+
+
+*/
 
                 }
 
@@ -73,42 +119,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-                // Set up ListView
-         /*   final ListView listView = (ListView) findViewById(R.id.listView);
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+            // Show user Latest Calendar items
+            final ListView listView = (ListView) findViewById(R.id.calendar_recent);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
             listView.setAdapter(adapter);
 
-            // Add items via the Button and EditText at the bottom of the view.
-            final EditText text = (EditText) findViewById(R.id.todoText);
-            final Button button = (Button) findViewById(R.id.addButton);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    mDatabase.child("users").child(mUserId).child("items").push().child("title").setValue(text.getText().toString());
-                    text.setText("");
-                }
-            });
+         //   Log.i("Familyid: ", mFamilyID);
 
-            // Use Firebase to populate the list.
-            mDatabase.child("users").child(mUserId).child("items").addChildEventListener(new ChildEventListener() {
+            mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    adapter.add((String) dataSnapshot.child("title").getValue());
-                }
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    adapter.remove((String) dataSnapshot.child("title").getValue());
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        String dateKey = child.getKey();
+                        String addme = "Date: "+dateKey + "  Event: "+ child.child("Description").getValue(String.class);
+                        adapter.add(addme);
+                    }
                 }
 
                 @Override
@@ -116,29 +142,33 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            // Deletes items when clicked
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    mDatabase.child("users").child(mUserId).child("items")
-                            .orderByChild("title")
-                            .equalTo((String) listView.getItemAtPosition(position))
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.hasChildren()) {
-                                        DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                                        firstChild.getRef().removeValue();
-                                    }
-                                }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+        // Show user the notification events
 
-                                }
-                            });
+            final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
+            final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+            listView2.setAdapter(adapter2);
+
+            mDatabase.child("family").child("familyID").child("55").child("Notifications").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+                        String addme = child.child("NotificationText").getValue(String.class);
+                        adapter2.add(addme);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
             });
-*/
+
+
+
 
         }
 
@@ -150,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     private void loadLogInView() {
         Intent intent = new Intent(this, LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

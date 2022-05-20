@@ -104,6 +104,8 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
+
+
                                         // User newuser = new User(fname,lname);
                                    //     User newuser = new User("Steph","Murray");
                                   //      Log.d("Test","hi");
