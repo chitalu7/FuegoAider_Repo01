@@ -34,7 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
     This way, when we update the layout to contain the fields that we need, when a
     new user signs up, their information will be stored in the nosql database.
     */
-    String[] UserData = {"FirstName", "LastName", "Phone", "Email", "Password"};
+    String[] UserData = {"FirstName", "LastName", "Phone"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
