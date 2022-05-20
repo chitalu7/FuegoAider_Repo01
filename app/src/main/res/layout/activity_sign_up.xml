@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,32 +31,40 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="@string/surname_hint" >
+    </EditText>
 
-
+    <EditText
+        android:id="@+id/phoneField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/lastName"
+        android:layout_below="@+id/lastName"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/phone_hint" >
     </EditText>
 
     <EditText
         android:id="@+id/emailField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/lastName"
-        android:layout_below="@+id/lastName"
+        android:layout_below="@+id/phoneField"
+        android:layout_alignLeft="@+id/phoneField"
         android:ems="10"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:hint="@string/email_hint" >
-
-
     </EditText>
+
 
     <EditText
         android:id="@+id/passwordField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/emailField"
         android:layout_below="@+id/emailField"
+        android:layout_alignLeft="@+id/emailField"
         android:ems="10"
-        android:inputType="textPassword"
-        android:hint="@string/password_hint" />
+        android:hint="@string/password_hint"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/signupButton"

@@ -24,4 +24,6 @@
     <string name="action_logout">Logout</string>
     <string name="firstname_hint">First Name</string>
     <string name="surname_hint">Last Name</string>
+    <string name="phone_hint">Phone</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
