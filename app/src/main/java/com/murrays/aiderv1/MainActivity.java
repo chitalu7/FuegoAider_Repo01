@@ -5,12 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
                     TextView welcome= (TextView) findViewById(R.id.welcome);
                     welcome.setText("Welcome " + userFname);
 
+                    TextView userinfo = (TextView) findViewById(R.id.userinfo);
+
+                    userinfo.setText("Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+" Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
+
                 }
 
                 @Override
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // Set up ListView
-            final ListView listView = (ListView) findViewById(R.id.listView);
+         /*   final ListView listView = (ListView) findViewById(R.id.listView);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
             listView.setAdapter(adapter);
 
@@ -141,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                 }
             });
-
+*/
 
         }
 

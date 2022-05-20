@@ -2,6 +2,7 @@ package com.murrays.aiderv1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,8 +25,17 @@ public class SignUpActivity extends AppCompatActivity {
     protected EditText emailEditText;
     protected Button signUpButton;
     private FirebaseAuth mFirebaseAuth;
+
     protected EditText firstName;
     protected EditText lastName;
+    protected EditText phoneEditText;
+    protected EditText address1EditText;
+    protected EditText address2EditText;
+    protected EditText cityEditText;
+    protected EditText stateEditText;
+    protected EditText zipEditText;
+    protected String family_id = "55";
+
     private DatabaseReference mDatabase;
 
     @Override
@@ -37,6 +47,12 @@ public class SignUpActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         firstName = (EditText)findViewById(R.id.firstName);
         lastName = (EditText)findViewById(R.id.lastName);
+        phoneEditText = (EditText)findViewById(R.id.phone);
+        address1EditText = (EditText)findViewById(R.id.address1);
+        address2EditText = (EditText)findViewById(R.id.address2);
+        cityEditText = (EditText)findViewById(R.id.city);
+        stateEditText = (EditText)findViewById(R.id.state);
+        zipEditText = (EditText)findViewById(R.id.zip);
 
         passwordEditText = (EditText)findViewById(R.id.passwordField);
         emailEditText = (EditText)findViewById(R.id.emailField);
@@ -49,6 +65,15 @@ public class SignUpActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String fname = firstName.getText().toString();
                 String lname = lastName.getText().toString();
+                String phone = phoneEditText.getText().toString();
+                String address1 = address1EditText.getText().toString();
+                String address2 = address2EditText.getText().toString();
+                String city = cityEditText.getText().toString();
+                String zip = zipEditText.getText().toString();
+                String state = stateEditText.getText().toString();
+                String[] UserData = {"FirstName", "LastName", "Phone","Address1","Address2","State","City","Zip", "FamilyID"};
+
+
                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
                 password = password.trim();
@@ -70,9 +95,16 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         FirebaseUser user = task.getResult().getUser();
                                         String mUserId = user.getUid();
-                                        mDatabase.child("users").child(mUserId).child("profile").child("FirstName").setValue(fname);
-                                       mDatabase.child("users").child(mUserId).child("profile").child("LastName").setValue(lname);
-                                       // User newuser = new User(fname,lname);
+                                        DatabaseReference mProfile = mDatabase.child("users").child(mUserId).child("profile");
+                                        String[] userDataValues = {fname, lname, phone, address1, address2, state, city, zip, family_id};
+                                        for(int i = 0; i< userDataValues.length;i++) {
+                                            mProfile.child(UserData[i]).setValue(userDataValues[i]);
+                                            Log.d(UserData[i]+" ",userDataValues[i]);
+                                        }
+
+
+
+                                        // User newuser = new User(fname,lname);
                                    //     User newuser = new User("Steph","Murray");
                                   //      Log.d("Test","hi");
                                     //    Log.d("Hello", newuser.FirstName);

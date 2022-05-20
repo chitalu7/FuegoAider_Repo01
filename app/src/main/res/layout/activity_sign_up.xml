@@ -35,11 +35,89 @@
     </EditText>
 
     <EditText
-        android:id="@+id/emailField"
+        android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/lastName"
         android:layout_below="@+id/lastName"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/phone_hint" >
+
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/address1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/phone"
+        android:layout_below="@+id/phone"
+        android:ems="20"
+        android:inputType="text"
+        android:hint="@string/address1_hint" >
+
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/address2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/address1"
+        android:layout_below="@+id/address1"
+        android:ems="20"
+        android:inputType="textPostalAddress"
+        android:hint="@string/address2_hint" >
+
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/address2"
+        android:layout_below="@+id/address2"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        android:hint="@string/city_hint" >
+
+
+    </EditText>
+    <EditText
+        android:id="@+id/state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/city"
+        android:layout_below="@+id/city"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/state_hint" >
+
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/zip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/state"
+        android:layout_below="@+id/state"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/zip_hint" >
+
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/emailField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/zip"
+        android:layout_below="@+id/zip"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:hint="@string/email_hint" >
