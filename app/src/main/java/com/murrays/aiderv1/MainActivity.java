@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        //after the database is connected to the app and the reference is
+        // established the app retrieves the current user that is loged in
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
@@ -53,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mUserId = mFirebaseUser.getUid();
 
+            // the current mUserId is then used to access the specific node within
+            // the firebase database to retrieve a snapshot of the data
+            // we can specify what data we want, since this is the welcome page
+            //we want the persons first name to welcome them, their info
+            //and eventually  their calendar and notifications that will be clickable
+            // in later development
 
             mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -66,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
                     TextView userinfo = (TextView) findViewById(R.id.userinfo);
 
                     userinfo.setText( getString(R.string.new_line)+ "Here is some of the data we currently have for you: "+ getString(R.string.new_line)+"Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+"Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
+
+                    //the code below is meant for our calendar feature that we are
+                    //still figuring out
+
 
 
                     //Seed some data for other nodes

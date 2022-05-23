@@ -1,5 +1,8 @@
 package com.murrays.aiderv1;
-
+//this is our User class, it is the framework for a custom User object
+//is based from the nodes on the database
+// (we might not need to use this since we are pulling directly from the database
+// as of now)
 public class User {
     public String FirstName;
     public String LastName;
