@@ -44,6 +44,9 @@ public class LogInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //This event listener that when the login button it clicked it collects
+        // the email from the text view fields and turns them into strings to be
+        // authenticated through the firebase authenticator
 
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override

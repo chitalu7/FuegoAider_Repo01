@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+//this is the sign up fragment
 public class SignUpActivity extends AppCompatActivity {
 
     protected EditText passwordEditText;
@@ -60,6 +61,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
+            //this event listener takes the info put in the Text View Boxes
+            //and adds them to the firebase database
             public void onClick(View v) {
                 String password = passwordEditText.getText().toString();
                 String email = emailEditText.getText().toString();
@@ -104,6 +107,11 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
+
+                                        //the code below was an attempt to create a custom object fron
+                                        //our User class to be pushed into the firebase database
+                                        //but we have not figure out how and have been directly
+                                        //pulling from the database instead
 
 
                                         // User newuser = new User(fname,lname);

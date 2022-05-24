@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.murrays.aiderv1.databinding.FragmentSecondBinding;
-
+// this fragment was meant to practice using the navigation tool in resource manager
+// however we stuck to doing it manually, we have left this and the first fragment
+// just in case we want to experiment with it later
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
