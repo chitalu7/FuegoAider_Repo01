@@ -31,4 +31,6 @@
     <string name="state_hint">State</string>
     <string name="zip_hint">Zip Code</string>
     <string name="new_line">\u000A</string>
+    <string name="sign_title">Aider</string>
+    <string name="sign_subtitle">SignUp to Connect with Family</string>
 </resources>
