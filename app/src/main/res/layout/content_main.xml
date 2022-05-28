@@ -69,4 +69,16 @@
             android:text="@string/add_item"/>-->
     </LinearLayout>
 
+    <Button
+        android:id="@+id/calendarButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calendar" />
+
+    <Button
+        android:id="@+id/meetupButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MeetUp" />
+
 </LinearLayout>
