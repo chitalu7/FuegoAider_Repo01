@@ -65,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //after the database is connected to the app and the reference is
+
+
+
+            //after the database is connected to the app and the reference is
         // established the app retrieves the current user that is loged in
 
         if (mFirebaseUser == null) {
@@ -94,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
                     userinfo.setText( getString(R.string.new_line)+ "Here is some of the data we currently have for you: "+ getString(R.string.new_line)+"Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+"Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
 
-                    //the code below is meant for our calendar feature that we are
-                    //still figuring out
+                    //the code below is meant for seeding dummy data to the database before we have those fragments working
+                    //
 
 
 
@@ -199,6 +202,14 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
+            Button calendarbutton = (Button) findViewById(R.id.calendar_button);
+
+            calendarbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, Calendar.class));
+                }
+            });
 
 
         }
