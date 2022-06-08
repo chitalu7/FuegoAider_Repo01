@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 //import com.murrays.aiderv1.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         Button calendarButton = (Button) findViewById(R.id.calendarButton);
         Button meetupButton = (Button) findViewById(R.id.meetupButton);
         calendarButton.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+*/
         // Initialize Firebase Auth and Database Reference
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -93,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
                     welcome.setText("Welcome " + userFname);
                     mFamilyID =  dataSnapshot.child("FamilyID").getValue(String.class);
 
-                    TextView userinfo = (TextView) findViewById(R.id.userinfo);
+                  //  TextView userinfo = (TextView) findViewById(R.id.userinfo);
 
-                    userinfo.setText( getString(R.string.new_line)+ "Here is some of the data we currently have for you: "+ getString(R.string.new_line)+"Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+"Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
+                  //  userinfo.setText( getString(R.string.new_line)+ "Here is some of the data we currently have for you: "+ getString(R.string.new_line)+"Name: " + userFname + " "+ (String)dataSnapshot.child("LastName").getValue() + getString(R.string.new_line)+"Address: " +(String)dataSnapshot.child("Address1").getValue()+", "+ (String)dataSnapshot.child("City").getValue());
 
                     //the code below is meant for seeding dummy data to the database before we have those fragments working
                     //
@@ -166,7 +169,15 @@ public class MainActivity extends AppCompatActivity {
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         String dateKey = child.getKey();
-                        String addme = "Date: "+dateKey + "  Event: "+ child.child("Description").getValue(String.class);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
+                        Date thisEventDate = new Date();
+                        try {
+                            thisEventDate = simpleDateFormat.parse(dateKey);
+                        }catch(Exception e){
+
+                        }
+                        String niceDate = String.valueOf(thisEventDate);
+                        String addme = "Date: "+niceDate + "  Event: "+ child.child("Description").getValue(String.class);
                         adapter.add(addme);
                     }
                 }
@@ -202,14 +213,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-            Button calendarbutton = (Button) findViewById(R.id.calendar_button);
-
-            calendarbutton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, Calendar.class));
-                }
-            });
 
 
         }
@@ -229,6 +232,9 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+    private void loadCalendarView() {
+        startActivity(new Intent(MainActivity.this, Calendar.class));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -243,10 +249,14 @@ public class MainActivity extends AppCompatActivity {
             loadLogInView();
         }
 
+        if (id == R.id.action_calendar) {
+            loadCalendarView();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-  //he  @Override
+  //  @Override
   //  public boolean onSupportNavigateUp() {
       //  NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
     //   return NavigationUI.navigateUp(navController, appBarConfiguration)

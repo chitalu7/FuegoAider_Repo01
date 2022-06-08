@@ -39,5 +39,7 @@
 <!--current code in main-->  
     <string name="sign_title">Aider</string>
     <string name="sign_subtitle">SignUp to Connect with Family</string>
-<!--END current code in main-->  
+    <string name="action_calendar">Calendar</string>
+    <string name="action_home">Home</string>
+    <!--END current code in main-->
 </resources>
