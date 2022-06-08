@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/custom_font"
+        android:textStyle="bold"
 
         />
 
@@ -31,6 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Latest Calendar Items"
         android:layout_marginTop="20px"
+        android:textStyle="bold"
         android:fontFamily="@font/custom_font"
 
         />
@@ -47,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Latest Notifications"
+        android:textStyle="bold"
         android:fontFamily="@font/custom_font"
 
         />

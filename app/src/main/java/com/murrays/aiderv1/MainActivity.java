@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Show user Latest Calendar items
             final ListView listView = (ListView) findViewById(R.id.calendar_recent);
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
             listView.setAdapter(adapter);
 
          //   Log.i("Familyid: ", mFamilyID);
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         // Show user the notification events
 
             final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
-            final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+            final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
             listView2.setAdapter(adapter2);
 
             mDatabase.child("family").child("familyID").child("55").child("Notifications").addValueEventListener(new ValueEventListener() {

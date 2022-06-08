@@ -102,7 +102,7 @@ public class Calendar extends AppCompatActivity{
 
         // Show user Latest Calendar items
         final ListView listView = (ListView) findViewById(R.id.calendar_recent_calview);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
         listView.setAdapter(adapter);
 
         //   Log.i("Familyid: ", mFamilyID);
