@@ -31,13 +31,15 @@
     <string name="state_hint">State</string>
     <string name="zip_hint">Zip Code</string>
     <string name="new_line">\u000A</string>
-<!--From stezziebranch-->
+    <!--From stezziebranch-->
     <!-- TODO: Remove or change this placeholder text -->
     <!--string name="hello_blank_fragment">Hello blank fragment</string-->
-<!--END stezziebranch - a line from default scaffold yes?--> 
+    <!--END stezziebranch - a line from default scaffold yes?-->
 
-<!--current code in main-->  
+    <!--current code in main-->
     <string name="sign_title">Aider</string>
     <string name="sign_subtitle">SignUp to Connect with Family</string>
-<!--END current code in main-->  
+    <string name="bttn_calEvents">Calendar Events</string>
+    <string name="bttn_EventsToCalender">Back to Calender</string>
+    <!--END current code in main-->
 </resources>
