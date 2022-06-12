@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalendarActivity">
+    tools:context=".MainActivity">
+
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/latest_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calendar View"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Your Upcoming Events -  Image Will be here"
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/background_dark" />
+
+    <ListView
+        android:id="@+id/calendar_recent_calview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/latest_title"
+        android:fontFamily="@font/custom_font"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="40px" />
+
+    <!-- Add TextView to display the date -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addevent"
+        android:textStyle="bold"
+        android:layout_below="@+id/calendar_recent_calview"
+        android:layout_marginTop="50dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/custom_font"
+        android:layout_marginStart="45dp"
+        android:layout_marginBottom="50dp"
+        />
+
+    <!-- Add CalendarView to display the Calendar -->
+    <CalendarView
+        android:layout_below="@+id/calendar_recent_calview"
+        android:id="@+id/calendar"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="19dp"
+        android:fontFamily="@font/custom_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </CalendarView>
+
+</RelativeLayout>

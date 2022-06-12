@@ -11,35 +11,29 @@
         <entry key="..\:/AndroidApps/Aiderv1/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="..\:/AndroidApps/Aiderv1/app/src/main/res/layout/content_main.xml" value="0.18802083333333333" />
         <entry key="..\:/AndroidApps/Aiderv1/app/src/main/res/menu/menu_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/font/custom_font.xml" value="0.36770833333333336" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_calendar.xml" value="0.36666666666666664" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_calendar_day.xml" value="0.18802083333333333" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_calendar_main.xml" value="0.24322916666666666" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_log_in.xml" value="0.36666666666666664" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_main.xml" value="0.246875" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_meetup.xml" value="0.24322916666666666" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/activity_sign_up.xml" value="0.30277777777777776" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/fragment_calendar_initial.xml" value="0.3375" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/gridcell.xml" value="0.3375" />
+        <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/layout/listview_layout.xml" value="0.3375" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/menu/menu_main.xml" value="0.18802083333333333" />
-        
-<!--From stezziebranch -->
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2385" />
         <entry key="..\:/OneDrive - Bellevue College/ISIT322/FuegoAider_Repo01/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1065" />
-<!--END stezziebranch-->        
-
-
-    <!--From Tashib's Branch-->
         <entry key="..\:/Users/Tashib/Documents/SCHOOL/ISIT 322/FuegoAider_Repo01/app/src/main/res/layout/activity_calendar.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Tashib/Documents/SCHOOL/ISIT 322/FuegoAider_Repo01/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Tashib/Documents/SCHOOL/ISIT 322/FuegoAider_Repo01/app/src/main/res/layout/activity_meetup.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Tashib/Documents/SCHOOL/ISIT 322/FuegoAider_Repo01/app/src/main/res/layout/content_main.xml" value="0.18802083333333333" />
-    <!--END of Tashib's Branch-->
-
-    <!--Previous Main-->          
-        <!--entry key="..\:/Users/nicou/OneDrive/Documents/School/Spring 2021/ISIT 322/FuegoAider_Repo01/app/src/main/res/drawable/et_custom.xml" value="0.1" /-->
-        <!--entry key="..\:/Users/nicou/OneDrive/Documents/School/Spring 2021/ISIT 322/FuegoAider_Repo01/app/src/main/res/layout/activity_sign_up.xml" value="0.1" /-->
-    <!--END Previous Main-->    
-
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

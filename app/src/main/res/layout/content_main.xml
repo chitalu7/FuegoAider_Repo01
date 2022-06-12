@@ -16,7 +16,10 @@
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         />
+        android:fontFamily="@font/custom_font"
+        android:textStyle="bold"
+
+        />
 
     <TextView
         android:id="@+id/userinfo"
@@ -29,9 +32,13 @@
         android:layout_height="wrap_content"
         android:text="Latest Calendar Items"
         android:layout_marginTop="20px"
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
+
         />
     <ListView
         android:layout_marginTop="20px"
+        android:fontFamily="@font/custom_font"
         android:id="@+id/calendar_recent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +49,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Latest Notifications"
+        android:textStyle="bold"
+        android:fontFamily="@font/custom_font"
+
         />
     <ListView
         android:layout_marginTop="00px"
@@ -49,12 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-<Button
-    android:id="@+id/calendar_button"
-    android:layout_marginTop="40px"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Go to Calendar"></Button>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +77,7 @@
             android:text="@string/add_item"/>-->
     </LinearLayout>
 
-    <Button
+<!--    <Button
         android:id="@+id/calendarButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,5 +88,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="MeetUp" />
+        -->
 
 </LinearLayout>

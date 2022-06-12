@@ -1,293 +1,186 @@
 package com.murrays.aiderv1;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class Calendar extends Activity implements OnClickListener
-{
-    private static final String tag = "Main";
-    private Button selectedDayMonthYearButton;
-    private Button currentMonth;
-    private ImageView prevMonth;
-    private ImageView nextMonth;
-    private GridView calendarView;
-    private GridCellAdapter adapter;
-    private java.util.Calendar _calendar;
-    private int month, year;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ui.AppBarConfiguration;
 
-    private void getRequestParameters()
-    {
-        Intent intent = getIntent();
-        if (intent != null)
-        {
-            Bundle extras = intent.getExtras();
-            if (extras != null)
-            {
-                if (extras != null)
-                {
-                    Log.d(tag, "+++++----------------->" + extras.getString("params"));
-                }
-            }
-        }
-    }
+import androidx.appcompat.app.AppCompatActivity;
 
-    /** Called when the activity is first created. */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Calendar extends AppCompatActivity{
+    CalendarView calendar;
+    private AppBarConfiguration appBarConfiguration;
+   // TextView date_view;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
+    private String mUserId;
+    private String userFname;
+    private String mFamilyID;
+
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calendar_initial);
+        setContentView(R.layout.activity_calendar_main);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView addme = findViewById(R.id.addevent);
+        addme.setText("Click a Day Below to Add an Event to that Day");
+        // By ID we can use each component
+        // which id is assign in xml file
+        // use findViewById() to get the
+        // CalendarView and TextView
+        calendar = (CalendarView)
+                findViewById(R.id.calendar);
+      //  date_view = (TextView)
+     //           findViewById(R.id.date_view);
+      //  Date currDate = new Date();
+       // date_view.setText(currDate.getDate() +"-"+(currDate.getMonth()+1)+"-"+currDate.getYear());
+        // Add Listener in calendar
+        calendar
+                .setOnDateChangeListener(
+                        new CalendarView
+                                .OnDateChangeListener() {
+                            @Override
 
-        _calendar = java.util.Calendar.getInstance(Locale.getDefault());
-        month = _calendar.get(java.util.Calendar.MONTH);
-        year = _calendar.get(java.util.Calendar.YEAR);
+                            // In this Listener have one method
+                            // and in this method we will
+                            // get the value of DAYS, MONTH, YEARS
+                            public void onSelectedDayChange(
+                                    @NonNull CalendarView view,
+                                    int year,
+                                    int month,
+                                    int dayOfMonth)
+                            {
 
-        selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
+                                // Store the value of date with
+                                // format in String type Variable
+                                // Add 1 in month because month
+                                // index is start with 0
+                                String Date
+                                        = dayOfMonth + "-"
+                                        + (month + 1) + "-" + year;
 
-        prevMonth = (ImageView) this.findViewById(R.id.prevMonth);
-        prevMonth.setOnClickListener(this);
+                                // set this date in TextView for Display
+                              //  date_view.setText(Date);
+                                String dateToPass = ""+dayOfMonth+(month+1)+year;
+                                gotoNextPage(dateToPass);
 
-        currentMonth = (Button) this.findViewById(R.id.currentMonth);
-        currentMonth.setText(_calendar.getTime().toString());
 
-        nextMonth = (ImageView) this.findViewById(R.id.nextMonth);
-        nextMonth.setOnClickListener(this);
 
-        calendarView = (GridView) this.findViewById(R.id.calendar);
+                            }
+                        });
 
-        // Initialised
-        adapter = new GridCellAdapter(getApplicationContext(), R.id.gridcell, month, year);
-        adapter.notifyDataSetChanged();
-        calendarView.setAdapter(adapter);
 
+        // Show user Latest Calendar items
+        final ListView listView = (ListView) findViewById(R.id.calendar_recent_calview);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
+        listView.setAdapter(adapter);
+
+        //   Log.i("Familyid: ", mFamilyID);
+
+        mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    String dateKey = child.getKey();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
+                    Date thisEventDate = new Date();
+
+                    try {
+                        thisEventDate = simpleDateFormat.parse(dateKey);
+                    }catch(Exception e){
+
+                    }
+
+                    String niceDate = String.valueOf(thisEventDate);
+                    String addme = niceDate + "  Event: "+ child.child("Description").getValue(String.class);
+                    adapter.add(addme);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+    private void gotoNextPage(String date){
+        Intent intent = new Intent(Calendar.this,CalendarActivity.class);
+        intent.putExtra("date", date);
+        startActivity(intent);
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v == prevMonth)
-        {
-            if (month <= 1)
-            {
-                month = 11;
-                year--;
-            } else
-            {
-                month--;
-            }
-
-            Log.d(tag, "Before 1 MONTH " + "Month: " + month + " " + "Year: " + year);
-            adapter = new GridCellAdapter(getApplicationContext(), R.id.gridcell, month, year);
-            _calendar.set(year, month, _calendar.get(java.util.Calendar.DAY_OF_MONTH));
-            currentMonth.setText(_calendar.getTime().toString());
-
-            adapter.notifyDataSetChanged();
-            calendarView.setAdapter(adapter);
-        }
-        if (v == nextMonth)
-        {
-            if (month >= 11)
-            {
-                month = 0;
-                year++;
-            } else
-            {
-                month++;
-            }
-
-            Log.d(tag, "After 1 MONTH " + "Month: " + month + " " + "Year: " + year);
-            adapter = new GridCellAdapter(getApplicationContext(), R.id.gridcell, month, year);
-            _calendar.set(year, month, _calendar.get(java.util.Calendar.DAY_OF_MONTH));
-            currentMonth.setText(_calendar.getTime().toString());
-            adapter.notifyDataSetChanged();
-            calendarView.setAdapter(adapter);
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
-    //
-    public class GridCellAdapter extends BaseAdapter implements OnClickListener
-    {
-        private static final String tag = "GridCellAdapter";
-        private final Context _context;
-        private final List<String> list;
-        private final String[] weekdays = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-        private final String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-        private final int[] daysOfMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        private final int month, year;
-        int daysInMonth, prevMonthDays;
-        private final int currentDayOfMonth;
-        private Button gridcell;
-
-        // Days in Current Month
-        public GridCellAdapter(Context context, int textViewResourceId, int month, int year)
-        {
-            super();
-            this._context = context;
-            this.list = new ArrayList<String>();
-            this.month = month;
-            this.year = year;
-
-            Log.d(tag, "Month: " + month + " " + "Year: " + year);
-            java.util.Calendar calendar = java.util.Calendar.getInstance();
-            currentDayOfMonth = calendar.get(java.util.Calendar.DAY_OF_MONTH);
-
-            printMonth(month, year);
-        }
-
-        public String getItem(int position)
-        {
-            return list.get(position);
-        }
-
-        @Override
-        public int getCount()
-        {
-            return list.size();
-        }
-
-        private void printMonth(int mm, int yy)
-        {
-            // The number of days to leave blank at
-            // the start of this month.
-            int trailingSpaces = 0;
-            int leadSpaces = 0;
-            int daysInPrevMonth = 0;
-            int prevMonth = 0;
-            int prevYear = 0;
-            int nextMonth = 0;
-            int nextYear = 0;
-
-            GregorianCalendar cal = new GregorianCalendar(yy, mm, currentDayOfMonth);
-
-            // Days in Current Month
-            daysInMonth = daysOfMonth[mm];
-            int currentMonth = mm;
-            if (currentMonth == 11)
-            {
-                prevMonth = 10;
-                daysInPrevMonth = daysOfMonth[prevMonth];
-                nextMonth = 0;
-                prevYear = yy;
-                nextYear = yy + 1;
-            } else if (currentMonth == 0)
-            {
-                prevMonth = 11;
-                prevYear = yy - 1;
-                nextYear = yy;
-                daysInPrevMonth = daysOfMonth[prevMonth];
-                nextMonth = 1;
-            } else
-            {
-                prevMonth = currentMonth - 1;
-                nextMonth = currentMonth + 1;
-                nextYear = yy;
-                prevYear = yy;
-                daysInPrevMonth = daysOfMonth[prevMonth];
-            }
-
-            // Compute how much to leave before before the first day of the
-            // month.
-            // getDay() returns 0 for Sunday.
-            trailingSpaces = cal.get(java.util.Calendar.DAY_OF_WEEK) - 1;
-
-            Log.i("Spaces",new StringBuilder().append("Trailing spaces: ").append(trailingSpaces).toString());
-
-            if (cal.isLeapYear(cal.get(java.util.Calendar.YEAR)) && mm == 1)
-            {
-                ++daysInMonth;
-            }
-
-            // Trailing Month days
-            for (int i = 0; i < trailingSpaces; i++)
-            {
-                list.add(String.valueOf((daysInPrevMonth - trailingSpaces + 1) + i) + "-GREY" + "-" + months[prevMonth] + "-" + prevYear);
-            }
-
-            // Current Month Days
-            for (int i = 1; i <= daysInMonth; i++)
-            {
-                list.add(String.valueOf(i) + "-WHITE" + "-" + months[mm] + "-" + yy);
-            }
-
-            // Leading Month days
-            for (int i = 0; i < list.size() % 7; i++)
-            {
-                Log.d(tag, "NEXT MONTH:= " + months[nextMonth]);
-                list.add(String.valueOf(i + 1) + "-GREY" + "-" + months[nextMonth] + "-" + nextYear);
-            }
-        }
-
-        @Override
-        public long getItemId(int position)
-        {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            Log.d(tag, "getView ...");
-            View row = convertView;
-            if (row == null)
-            {
-                // ROW INFLATION
-                Log.d(tag, "Starting XML Row Inflation ... ");
-                LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.gridcell, parent, false);
-
-                Log.d(tag, "Successfully completed XML Row Inflation!");
-            }
-
-            gridcell = (Button) row.findViewById(R.id.gridcell);
-            gridcell.setOnClickListener(this);
-
-            // ACCOUNT FOR SPACING
-
-            Log.d(tag, "Current Day: " + currentDayOfMonth);
-            String[] day_color = list.get(position).split("-");
-            gridcell.setText(day_color[0]);
-            gridcell.setTag(day_color[0] + "-" + day_color[2] + "-" + day_color[3]);
-
-            if (day_color[1].equals("GREY"))
-            {
-                gridcell.setTextColor(Color.LTGRAY);
-            }
-            if (day_color[1].equals("WHITE"))
-            {
-                gridcell.setTextColor(Color.WHITE);
-            }
-            if (position == currentDayOfMonth)
-            {
-                gridcell.setTextColor(Color.BLUE);
-            }
-
-            return row;
-        }
-
-        @Override
-        public void onClick(View view)
-        {
-            String date_month_year = (String) view.getTag();
-            Toast.makeText(getApplicationContext(), date_month_year, Toast.LENGTH_SHORT).show();
-
-        }
+    private void loadLogInView() {
+        Intent intent = new Intent(this, LogInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
+
+    private void loadHomeView(){
+        startActivity(new Intent(Calendar.this, MainActivity.class));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_logout) {
+            mFirebaseAuth.signOut();
+            loadLogInView();
+        }
+        if (id == R.id.action_home) {
+            loadHomeView();
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
