@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Aiderv1">
         <activity
+            android:name=".CalendarAddActivity"
+            android:exported="false" />
+        <activity
             android:name=".CalenderEventsActivity"
             android:exported="false" />
         <activity
