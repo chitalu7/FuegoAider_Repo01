@@ -24,16 +24,59 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private String userFname;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private double accelerationCurrentValue;
+    private double accelerationPreviousValue;
+    TextView txtAcceleration, txtCurrent, txtPrev;
     //private String mFamilyID;
 
 
+    private SensorEventListener sensorEventListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent)
+        {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+            float z = sensorEvent.values[2];
+
+            accelerationCurrentValue = Math.sqrt((x * x + y * y + z * z));
+            double changeInAcceleration = Math.abs(accelerationCurrentValue - accelerationPreviousValue);
+            accelerationPreviousValue = accelerationCurrentValue;
+
+            txtCurrent.setText("Current = " + /*(int)*/accelerationCurrentValue);
+            txtPrev.setText(("Prev = " + /*(int)*/accelerationPreviousValue));
+            txtAcceleration.setText("Acceleration change = " + /*(int)*/changeInAcceleration);
+
+            if(changeInAcceleration > 14) {
+                txtAcceleration.setBackgroundColor(Color.RED);
+            }
+            else if (changeInAcceleration > 5) {
+                txtAcceleration.setBackgroundColor(Color.BLUE);
+            }
+            else if(changeInAcceleration > 2) {
+                txtAcceleration.setBackgroundColor(Color.GREEN);
+            }
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
+    };
 
 
 
@@ -48,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        txtAcceleration = findViewById(R.id.txtAcceleration);
+        txtCurrent = findViewById(R.id.txtCurrent);
+        txtPrev = findViewById(R.id.txtPrev);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
@@ -151,6 +199,15 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    //2 methods to add -> onResume, onPause
+    protected void onResume() {
+        super.onResume();
+        //the sensor manager will be using this function called sensorEventListener
+        mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(sensorEventListener);
+    }
 
 }

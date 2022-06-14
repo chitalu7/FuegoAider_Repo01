@@ -60,34 +60,45 @@
         android:layout_height="wrap_content"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtAcceleration"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/holo_blue_bright"
+        android:padding="10dp"
+        android:text=""
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <EditText
-            android:id="@+id/todoText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_item"/>-->
-    </LinearLayout>
-
-<!--    <Button
-        android:id="@+id/calendarButton"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtCurrent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calendar" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/holo_blue_bright"
+        android:padding="10dp"
+        android:text=""
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/meetupButton"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtPrev"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MeetUp" />
-        -->
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/holo_blue_bright"
+        android:padding="10dp"
+        android:text=""
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    txtPrev
 
 </LinearLayout>
