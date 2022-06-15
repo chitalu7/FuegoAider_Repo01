@@ -77,11 +77,13 @@ public class CalendarAddActivity extends AppCompatActivity {
                 //adds a random time to the date to give it a unique key in db
                 // does not prevent duplicates
                 //maybe add  an if statement to compare previous times
+
                 final Random random = new Random();
                 final int millisInDay = 24 * 60 * 60 * 1000;
                 Time ranTime = new Time(random.nextInt(millisInDay));
                 String TimeString = ranTime.toString();
                 String newTime = TimeString.replace(":", "");
+
                 // add time to the end
                 String add_dt = date + newTime;
                 String newTime_dbKey = add_dt.substring(0, 12);
@@ -100,8 +102,8 @@ public class CalendarAddActivity extends AppCompatActivity {
                         mFamilyID = dataSnapshot.child("FamilyID").getValue(String.class);
 
                            Log.i("Familyid", mFamilyID);
-                        //mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Description").setValue(description);
-                        //mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Notes").setValue(notes);
+                        mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Description").setValue(description);
+                        mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Notes").setValue(notes);
 
                         Log.i("checkFamilyid", mFamilyID);
 
@@ -176,5 +178,7 @@ public class CalendarAddActivity extends AppCompatActivity {
             }
         });
     };
+
+
 }
 
