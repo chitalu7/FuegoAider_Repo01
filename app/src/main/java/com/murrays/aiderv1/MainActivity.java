@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,11 +26,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+//Sensors
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
+
+//Location
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +49,9 @@ import java.util.Locale;
 
 
 
+
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private FirebaseAuth mFirebaseAuth;
     private String userFname;
     private SensorManager mSensorManager;
@@ -59,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
             double changeInAcceleration = Math.abs(accelerationCurrentValue - accelerationPreviousValue);
             accelerationPreviousValue = accelerationCurrentValue;
 
-            txtCurrent.setText("Current = " + /*(int)*/accelerationCurrentValue);
-            txtPrev.setText(("Prev = " + /*(int)*/accelerationPreviousValue));
+            //txtCurrent.setText("Current = " + /*(int)*/accelerationCurrentValue);
+            //txtPrev.setText(("Prev = " + /*(int)*/accelerationPreviousValue));
             txtAcceleration.setText("Acceleration change = " + /*(int)*/changeInAcceleration);
 
-            if(changeInAcceleration > 14) {
+            if(changeInAcceleration > 12) {
                 txtAcceleration.setBackgroundColor(Color.RED);
             }
             else if (changeInAcceleration > 5) {
@@ -78,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +105,35 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         txtAcceleration = findViewById(R.id.txtAcceleration);
-        txtCurrent = findViewById(R.id.txtCurrent);
-        txtPrev = findViewById(R.id.txtPrev);
+        //txtCurrent = findViewById(R.id.txtCurrent);
+        //txtPrev = findViewById(R.id.txtPrev);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
+            //start
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(
+                        getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_CODE_LOCATION_PERMISSION
+                    );
+                } else {
+                    startLocationService();
+                }
+            }
+        });
+
+            findViewById(R.id.buttonStopLocationUpdates).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick (View v){
+                    stopLocationService();
+                }
+            });
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
@@ -167,6 +205,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationService();
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean isLocationServiceRunning() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if(activityManager != null) {
+            for(ActivityManager.RunningServiceInfo service :
+                    activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if(com.murrays.aiderv1.Location.LocationService.class.getName().equals(service.service.getClassName())) {
+                    if(service.foreground) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private void startLocationService() {
+        if(!isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplication(), com.murrays.aiderv1.Location.LocationService.class);
+            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_START_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void stopLocationService() {
+        if(isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
+            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

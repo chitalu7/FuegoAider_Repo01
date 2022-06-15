@@ -63,42 +63,48 @@
     <TextView
         android:id="@+id/txtAcceleration"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/holo_blue_bright"
         android:padding="10dp"
         android:text=""
+        android:textColor="#ffffff"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtCurrent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/holo_blue_bright"
-        android:padding="10dp"
-        android:text=""
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtPrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/holo_blue_bright"
-        android:padding="10dp"
-        android:text=""
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    txtPrev
+
+
+
+    <Button
+        android:id="@+id/buttonStartLocationUpdates"
+        android:layout_width="75dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="230dp"
+        android:backgroundTint="@color/teal_200"
+        android:tag="0"
+        android:text="@string/startLocation"
+        android:textColor="#263238"
+        android:textSize="10dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/buttonStopLocationUpdates"
+        android:layout_width="75dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="230dp"
+        android:layout_marginBottom="150dp"
+        android:backgroundTint="@color/teal_200"
+        android:tag="0"
+        android:text="@string/stopLocation"
+        android:textColor="#263238"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </LinearLayout>

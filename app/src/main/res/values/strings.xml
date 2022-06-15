@@ -42,4 +42,10 @@
     <string name="action_calendar">Calendar</string>
     <string name="action_home">Home</string>
     <!--END current code in main-->
+    <string name="startLocation">Start Location</string>
+    <string name="stopLocation">Stop Location</string>
+
+
+
+
 </resources>
