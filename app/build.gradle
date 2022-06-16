@@ -53,6 +53,8 @@ android {
         implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
         androidTestImplementation 'androidx.test:runner:1.4.0'
         androidTestImplementation 'androidx.test:rules:1.4.0'
+        //Current version is 20.0.0 but don't update please.
+        implementation 'com.google.android.gms:play-services-location:17.0.0'
     }
 
 }
