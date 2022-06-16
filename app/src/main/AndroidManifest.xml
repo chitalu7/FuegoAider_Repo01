@@ -18,12 +18,22 @@
             android:exported="false" />
         <activity
             android:name=".CalendarActivity"
+            android:theme="@style/Theme.Aiderv1.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".CalendarEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CalendarAddActivity"
+            android:theme="@style/Theme.Aiderv1.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".SignUpActivity"
+            android:theme="@style/Theme.Aiderv1.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".LogInActivity"
+            android:theme="@style/Theme.Aiderv1.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".Calendar"

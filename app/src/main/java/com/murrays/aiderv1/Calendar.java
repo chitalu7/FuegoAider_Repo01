@@ -89,9 +89,32 @@ public class Calendar extends AppCompatActivity{
                                         = dayOfMonth + "-"
                                         + (month + 1) + "-" + year;
 
+
                                 // set this date in TextView for Display
                               //  date_view.setText(Date);
-                                String dateToPass = ""+dayOfMonth+(month+1)+year;
+                                String day_WZeros = "";
+                                String month_WZeros = "";
+                                month++;
+                                //add zero
+
+
+                                if(month < 10 ){
+
+                                    month_WZeros = "0"+month;
+                                }
+                                else{
+                                    month_WZeros = month+"";
+                                }
+
+                                if(dayOfMonth<10){
+                                    day_WZeros = "0"+dayOfMonth;
+
+                                }
+                                else{
+                                    day_WZeros = dayOfMonth+"";
+                                }
+                                String dateToPass = ""+(day_WZeros)+(month_WZeros)+year;
+
                                 gotoNextPage(dateToPass);
 
 
