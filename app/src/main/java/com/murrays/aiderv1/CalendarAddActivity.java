@@ -70,6 +70,12 @@ public class CalendarAddActivity extends AppCompatActivity {
         notesEvent = (EditText) findViewById(R.id.notes_textbox);
         addEventButton = (Button) findViewById(R.id.add_event_button);
 
+        //Get date passed from previous page and populates the form
+        Intent intent = getIntent();
+        String current_date = intent.getStringExtra("Date");
+        eventDate.setText(current_date.substring(0,8));
+
+
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,11 +98,8 @@ public class CalendarAddActivity extends AppCompatActivity {
                 String add_dt = date + newTime;
                 String newTime_dbKey = add_dt.substring(0, 12);
                 Log.i("checkDateTime", newTime_dbKey);
-                //112520220619
-                //062020220123
-                //061820222232
-                //Log.i("checkdescrp", description);
-                //Log.i("checknotes", notes);
+
+
 
 
                 String mUserId = mFirebaseUser.getUid();

@@ -6,47 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-
-    <TextView
-        android:id="@+id/latest_title"
+king
+    <ImageView
+        android:id="@+id/title"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="70dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Upcoming Events -  Image Will be here"
-        android:textStyle="bold"
-        android:fontFamily="@font/custom_font"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:textColor="@android:color/background_dark" />
+        android:src="@drawable/upcoming_events"/>
+
 
     <ListView
         android:id="@+id/calendar_recent_calview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/latest_title"
+        android:layout_below="@+id/title"
         android:fontFamily="@font/custom_font"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="40px" />
-
-    <!-- Add TextView to display the date -->
-    <TextView
+        android:layout_marginTop="20px" />
+mo
+    <ImageView
+        android:id="@+id/click"
+        android:layout_below="@+id/calendar_recent_calview"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/addevent"
-        android:textStyle="bold"
-        android:layout_below="@+id/calendar_recent_calview"
-        android:layout_marginTop="50dp"
-        android:textAlignment="center"
-        android:fontFamily="@font/custom_font"
-        android:layout_marginStart="45dp"
-        android:layout_marginBottom="50dp"
-        />
+        android:src="@drawable/click_events"/>
 
     <!-- Add CalendarView to display the Calendar -->
     <CalendarView
-        android:layout_below="@+id/calendar_recent_calview"
+        android:layout_below="@+id/click"
         android:id="@+id/calendar"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="19dp"
         android:fontFamily="@font/custom_font"
         android:layout_width="wrap_content"

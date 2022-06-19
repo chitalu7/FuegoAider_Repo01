@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private Sensor mAccelerometer;
     private double accelerationCurrentValue;
     private double accelerationPreviousValue;
-    TextView txtAcceleration, txtCurrent, txtPrev;
+   // TextView txtAcceleration, txtCurrent, txtPrev;
     //private String mFamilyID;
 
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             //txtCurrent.setText("Current = " + /*(int)*/accelerationCurrentValue);
             //txtPrev.setText(("Prev = " + /*(int)*/accelerationPreviousValue));
-            txtAcceleration.setText("Acceleration change = " + /*(int)*/changeInAcceleration);
+           /* txtAcceleration.setText("Acceleration change = " + *//*(int)*//*changeInAcceleration);
 
             if(changeInAcceleration > 12) {
                 txtAcceleration.setBackgroundColor(Color.RED);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if(changeInAcceleration > 2) {
                 txtAcceleration.setBackgroundColor(Color.GREEN);
-            }
+            }*/
         }
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {
@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        txtAcceleration = findViewById(R.id.txtAcceleration);
+        //txtAcceleration = findViewById(R.id.txtAcceleration);
         //txtCurrent = findViewById(R.id.txtCurrent);
         //txtPrev = findViewById(R.id.txtPrev);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
+        startLocationService();
+       /* findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
             //start
             @Override
             public void onClick(View v) {
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     stopLocationService();
                 }
             });
-
+*/
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
             loadLogInView();
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            final ListView listView = (ListView) findViewById(R.id.calendar_recent);
+          /*  final ListView listView = (ListView) findViewById(R.id.calendar_recent);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
             listView.setAdapter(adapter);
 
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
-            });
+            });*/
 
             final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
             final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
@@ -193,9 +193,14 @@ public class MainActivity extends AppCompatActivity {
             mDatabase.child("family").child("familyID").child("55").child("Notifications").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int num = 0;
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        String addme = child.child("NotificationText").getValue(String.class);
-                        adapter2.add(addme);
+                        // Get only to 5 records from notifications node
+                        if(num <6) {
+                            String addme = child.child("NotificationText").getValue(String.class);
+                            adapter2.add(addme);
+                            num++;
+                        }
                     }
                 }
                 @Override
@@ -273,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             mFirebaseAuth.signOut();
+            stopLocationService();
             loadLogInView();
         }
 
