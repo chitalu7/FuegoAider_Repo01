@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.Button;
@@ -30,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
+import java.util.List;
 
 
 public class CalendarActivity extends AppCompatActivity {
@@ -136,6 +138,8 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
+
+
         /*String[] finalCurrent_dateA = current_dateA;
         String finalcurrentDate = String.join(",",finalCurrent_dateA);*/
         mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
@@ -152,8 +156,8 @@ public class CalendarActivity extends AppCompatActivity {
                         //display the events for the day
                         String addme = "Date: " + current_date + "  Event: " + child.child("Description").getValue(String.class);
                         adapter.add(addme);
-                        Log.i("add to list",addme);
                     }
+
 //                   Date realDate = new Date(rDate);
                     //you can get day and get month to compare, it may be easier than comparing the whole day
                     //real.getDate()
@@ -182,20 +186,33 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+
+
         Button addbutton = findViewById(R.id.button2);
         addbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent oldIntent = getIntent();
+                String current_date = intent.getStringExtra("date");
                 Intent intent = new Intent(CalendarActivity.this, CalendarAddActivity.class);
+                intent.putExtra("Date",current_date);
                 startActivity(intent);
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gotoNextPage((String)listView.getItemAtPosition(position),current_date);
             }
         });
 
     }
 
-    private void gotoNextPage(String date){
+    private void gotoNextPage(String item, String dt){
         Intent intent = new Intent(CalendarActivity.this,CalendarEditActivity.class);
-        intent.putExtra("date", date);
+        intent.putExtra("txt", item);
+        intent.putExtra("date",dt);
         startActivity(intent);
     }
 
