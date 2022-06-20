@@ -52,8 +52,7 @@ public class Calendar extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView addme = findViewById(R.id.addevent);
-        addme.setText("Click a Day Below to Add an Event to that Day");
+
         // By ID we can use each component
         // which id is assign in xml file
         // use findViewById() to get the
@@ -89,9 +88,32 @@ public class Calendar extends AppCompatActivity{
                                         = dayOfMonth + "-"
                                         + (month + 1) + "-" + year;
 
+
                                 // set this date in TextView for Display
                               //  date_view.setText(Date);
-                                String dateToPass = ""+dayOfMonth+(month+1)+year;
+                                String day_WZeros = "";
+                                String month_WZeros = "";
+                                month++;
+                                //add zero
+
+
+                                if(month < 10 ){
+
+                                    month_WZeros = "0"+month;
+                                }
+                                else{
+                                    month_WZeros = month+"";
+                                }
+
+                                if(dayOfMonth<10){
+                                    day_WZeros = "0"+dayOfMonth;
+
+                                }
+                                else{
+                                    day_WZeros = dayOfMonth+"";
+                                }
+                                String dateToPass = ""+(day_WZeros)+(month_WZeros)+year;
+
                                 gotoNextPage(dateToPass);
 
 
@@ -105,26 +127,29 @@ public class Calendar extends AppCompatActivity{
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
         listView.setAdapter(adapter);
 
-        //   Log.i("Familyid: ", mFamilyID);
 
         mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                int num = 0;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     String dateKey = child.getKey();
+                    Log.i("Datekey",dateKey);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
                     Date thisEventDate = new Date();
 
                     try {
                         thisEventDate = simpleDateFormat.parse(dateKey);
+                        Log.i("Thiseventdate", thisEventDate.toString());
                     }catch(Exception e){
 
                     }
-
-                    String niceDate = String.valueOf(thisEventDate);
-                    String addme = niceDate + "  Event: "+ child.child("Description").getValue(String.class);
-                    adapter.add(addme);
+                    if(num <3) {
+                        String niceDate = String.valueOf(thisEventDate);
+                        String addme = niceDate + "  Event: " + child.child("Description").getValue(String.class);
+                        adapter.add(addme);
+                        num++;
+                    }
                 }
             }
 
