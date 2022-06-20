@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         //txtPrev = findViewById(R.id.txtPrev);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        startLocationService();
+//        startLocationService();
        /* findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
             //start
             @Override
@@ -210,50 +210,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationService();
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private boolean isLocationServiceRunning() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        if(activityManager != null) {
-            for(ActivityManager.RunningServiceInfo service :
-                    activityManager.getRunningServices(Integer.MAX_VALUE)) {
-                if(com.murrays.aiderv1.Location.LocationService.class.getName().equals(service.service.getClassName())) {
-                    if(service.foreground) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        return false;
-    }
-
-    private void startLocationService() {
-        if(!isLocationServiceRunning()) {
-            Intent intent = new Intent(getApplication(), com.murrays.aiderv1.Location.LocationService.class);
-            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_START_LOCATION_SERVICE);
-            startService(intent);
-            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void stopLocationService() {
-        if(isLocationServiceRunning()) {
-            Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
-            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_STOP_LOCATION_SERVICE);
-            startService(intent);
-            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+//            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                startLocationService();
+//            } else {
+//                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+//
+//    private boolean isLocationServiceRunning() {
+//        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//        if(activityManager != null) {
+//            for(ActivityManager.RunningServiceInfo service :
+//                    activityManager.getRunningServices(Integer.MAX_VALUE)) {
+//                if(com.murrays.aiderv1.Location.LocationService.class.getName().equals(service.service.getClassName())) {
+//                    if(service.foreground) {
+//                        return true;
+//                    }
+//                }
+//            }
+//            return false;
+//        }
+//        return false;
+//    }
+//
+//    private void startLocationService() {
+//        if(!isLocationServiceRunning()) {
+//            Intent intent = new Intent(getApplication(), com.murrays.aiderv1.Location.LocationService.class);
+//            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_START_LOCATION_SERVICE);
+//            startService(intent);
+//            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    private void stopLocationService() {
+//        if(isLocationServiceRunning()) {
+//            Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
+//            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_STOP_LOCATION_SERVICE);
+//            startService(intent);
+//            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -276,11 +276,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            mFirebaseAuth.signOut();
-            stopLocationService();
-            loadLogInView();
-        }
+//        if (id == R.id.action_logout) {
+//            mFirebaseAuth.signOut();
+//            stopLocationService();
+//            loadLogInView();
+//        }
 
         if (id == R.id.action_calendar) {
             loadCalendarView();

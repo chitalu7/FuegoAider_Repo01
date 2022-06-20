@@ -58,7 +58,7 @@ public class CalendarAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_add);
+        setContentView(R.layout.activity_calendar_add_main);
           mFirebaseAuth = FirebaseAuth.getInstance();
           mFirebaseUser = mFirebaseAuth.getCurrentUser();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
