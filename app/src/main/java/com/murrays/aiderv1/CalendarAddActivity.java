@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class CalendarAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_add);
+        setContentView(R.layout.activity_calendar_add_main);
           mFirebaseAuth = FirebaseAuth.getInstance();
           mFirebaseUser = mFirebaseAuth.getCurrentUser();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -68,7 +69,7 @@ public class CalendarAddActivity extends AppCompatActivity {
         eventTime = (EditText) findViewById(R.id.event_time);
         descriptionEvent = (EditText) findViewById(R.id.descript_textbox);
         notesEvent = (EditText) findViewById(R.id.notes_textbox);
-        addEventButton = (Button) findViewById(R.id.add_event_button);
+        ImageButton addEventButton = (ImageButton) findViewById(R.id.add_event_button);
 
         //Get date passed from previous page and populates the form
         Intent intent = getIntent();
@@ -203,6 +204,9 @@ public class CalendarAddActivity extends AppCompatActivity {
     private void loadHomeView(){
         startActivity(new Intent(CalendarAddActivity.this, MainActivity.class));
     }
+    private void loadCalendarView() {
+        startActivity(new Intent(CalendarAddActivity.this, Calendar.class));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,6 +222,9 @@ public class CalendarAddActivity extends AppCompatActivity {
         }
         if (id == R.id.action_home) {
             loadHomeView();
+        }
+        if (id == R.id.action_calendar) {
+            loadCalendarView();
         }
 
 

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,7 +63,7 @@ public class CalendarEditActivity extends AppCompatActivity {
             EditText eventTime = (EditText) findViewById(R.id.event_time) ;
             EditText eventDesc = (EditText) findViewById(R.id.descript_textbox) ;
             EditText eventNoes = (EditText) findViewById(R.id.notes_textbox) ;
-            Button editEvent = (Button) findViewById(R.id.add_event_button);
+            ImageButton editEvent = (ImageButton) findViewById(R.id.edit_event_button);
 
             mFirebaseAuth = FirebaseAuth.getInstance();
             mFirebaseUser = mFirebaseAuth.getCurrentUser();

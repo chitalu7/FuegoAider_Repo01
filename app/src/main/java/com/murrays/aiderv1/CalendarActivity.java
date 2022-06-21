@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calender_events);
+        setContentView(R.layout.activity_calender_events_main);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -188,8 +189,8 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
-        Button addbutton = findViewById(R.id.button2);
-        addbutton.setOnClickListener(new View.OnClickListener() {
+        ImageButton imageButton= findViewById(R.id.button2);
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent oldIntent = getIntent();
@@ -201,11 +202,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                gotoNextPage((String)listView.getItemAtPosition(position),current_date);
-            }
-        });
 
     }
 
@@ -233,6 +229,9 @@ public class CalendarActivity extends AppCompatActivity {
     private void loadHomeView(){
         startActivity(new Intent(CalendarActivity.this, MainActivity.class));
     }
+    private void loadCalendarView() {
+        startActivity(new Intent(CalendarActivity.this, Calendar.class));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -249,7 +248,9 @@ public class CalendarActivity extends AppCompatActivity {
         if (id == R.id.action_home) {
             loadHomeView();
         }
-
+        if (id == R.id.action_calendar) {
+            loadCalendarView();
+        }
 
 
         return super.onOptionsItemSelected(item);
