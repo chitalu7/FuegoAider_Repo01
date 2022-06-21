@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
 //        }
 //    }
+    //move into activities
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
