@@ -3,6 +3,8 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+    android:layout_marginTop = "180dp"
+    android:layout_marginBottom = "30dp"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
@@ -21,20 +23,20 @@
         android:text=" Enter Event Date as DDMMYYYY"
         android:textSize="17dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="50dp"
+
 
         />
     <EditText
         android:padding="15dp"
         android:id="@+id/event_date"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:ems="10"
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="68dp"
         android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:background="@drawable/et_custom"
         />
 
@@ -85,7 +87,7 @@
     android:layout_height="25dp"
     android:textSize="17dp"
     android:layout_marginBottom="10dp"
-    android:text="Enter Notes of Event"
+    android:text="Enter Notes About Event"
     />
     <EditText
         android:id="@+id/notes_textbox"
@@ -102,15 +104,14 @@
         android:background="@drawable/et_custom"
         android:layout_marginBottom="30dp"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/add_event_button"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="Add Event To Calendar"
+        android:layout_width="199dp"
+        android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="567dp"
-        android:background="@drawable/et_custom"/>
+        android:src ="@drawable/add_cal_eventbttn"/>
 
 
         </LinearLayout>
