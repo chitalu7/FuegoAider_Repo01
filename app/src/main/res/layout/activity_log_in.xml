@@ -32,13 +32,16 @@
         android:hint="@string/password_hint"
         android:inputType="textPassword" />
 
-    <Button
+
+
+    <ImageButton
+
         android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/passwordField"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        tools:layout_editor_absoluteY="68dp"
         android:layout_below="@+id/passwordField"
-        android:text="@string/login_button_label" />
+        android:src ="@drawable/login_bttn"/>
 
     <TextView
         android:id="@+id/signUpText"
@@ -47,6 +50,8 @@
         android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="69dp"
+        android:textSize="10pt"
+        android:textColor="@color/black"
         android:text="@string/sign_up_text" />
 
 </RelativeLayout>

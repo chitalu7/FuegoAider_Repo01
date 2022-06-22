@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text1"
         android:fontFamily="@font/custom_font"
-        android:textSize="8pt"
+        android:textSize="6pt"
 
 
         android:paddingTop="10dip" android:paddingBottom="10dip"/>

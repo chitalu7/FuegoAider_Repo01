@@ -2,6 +2,7 @@ package com.murrays.aiderv1;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,11 +14,14 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -89,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
     private double accelerationCurrentValue;
     private double accelerationPreviousValue;
     private static boolean activityVisible = true;
-    TextView txtAcceleration;  //, txtCurrent, txtPrev;
-    //private String mFamilyID;
+    private static  boolean shouldrun = true;
+
 
     DatabaseReference mDatabase;
 
@@ -109,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             accelerationPreviousValue = accelerationCurrentValue;
 
 
-            if(changeInAcceleration > 10) {
-                sendNotificationToDB();
+            if(changeInAcceleration >12) {
+               // sendNotificationToDB();
 
             }
 
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ImageButton sensorTrigger = (ImageButton)  findViewById(R.id.sensorButton);
 
 
 
@@ -134,18 +139,30 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //txtAcceleration = findViewById(R.id.txtAcceleration);
-        //txtCurrent = findViewById(R.id.txtCurrent);
-        //txtPrev = findViewById(R.id.txtPrev);
+
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        startLocationService();
+
+        // Check if permission has been requested to share location
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
             loadLogInView();
         } else {
+
+            if (ContextCompat.checkSelfPermission(
+                    getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_CODE_LOCATION_PERMISSION
+                );
+            } else {
+                startLocationService();
+            }
+
             String mUserId = mFirebaseUser.getUid();
             mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -161,11 +178,29 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("Error", "Failed to read value.", error.toException());
                 }
             });
+            sensorTrigger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    runSensorTriggerEvent();
+
+                }
+            });
+
+            populateListView();
+
+            // Only run the listener if we are on this activity currently
+
+        }
+    }
+
+    private void populateListView(){
 
             final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
+
+
             listView2.setAdapter(adapter);
-            String [] ids = new String[4];
+
 
             mDatabase.child("family").child("familyID").child("55").child("Notifications").limitToLast(3).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -177,12 +212,15 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
+                    shouldrun = false;
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-            // Only run the listener if we are on this activity currently
+
+
             if(isActivityVisible()){
                 listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -224,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-    }
 
     /// Check if this is the current activity we are on
 
@@ -268,7 +305,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
+        private void runSensorTriggerEvent(){
+        sendNotificationToDB();
+    }
     private void startLocationService() {
         if(!isLocationServiceRunning()) {
             Intent intent = new Intent(getApplication(), com.murrays.aiderv1.Location.LocationService.class);
@@ -310,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_logout) {
             mFirebaseAuth.signOut();
-            stopLocationService();
+         //   stopLocationService();
             loadLogInView();
         }
 
@@ -322,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
     //2 methods to add -> onResume, onPause
     protected void onResume() {
         super.onResume();
+
         //the sensor manager will be using this function called sensorEventListener
         mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -340,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
         String mUserId = mFirebaseUser.getUid();
 
-        userFname = "John";
+        userFname = "Stephanie";
 /*
 
         mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
@@ -361,7 +401,35 @@ public class MainActivity extends AppCompatActivity {
                 mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("NotificationText").setValue(notificationText);
                 mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("LogData").setValue(logData);
 
-                listenForDBChanges();
+        Toast.makeText(this, "ALERT!!! One of your family members may have fallen!", Toast.LENGTH_SHORT).show();
+
+      // listenForDBChanges();
+        final ListView listView3 = (ListView) findViewById(R.id.notifications_recent);
+        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
+        listView3.setAdapter(adapter2);
+
+        mDatabase.child("family").child("familyID").child("55").child("Notifications").limitToLast(3).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //We MUST clear the data adapter before we use it again
+                adapter2.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+                    String addme = child.child("NotificationText").getValue(String.class);
+                    adapter2.add(addme);
+
+
+                }
+                shouldrun = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+       // listenForDBChanges();
+
 
 /*
 
@@ -384,6 +452,7 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("family").child("familyID").child("55").child("Notifications").addChildEventListener(new ChildEventListener()
                 //mDatabase.child("family").child("familyID").child("55").child("Notifications").
         {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 pushNotification(previousChildName);
@@ -413,19 +482,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pushNotification(String notID){
+
+
+
+      NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n")
+                .setContentText("Fuego Aider")
+                .setSmallIcon(R.drawable.icon)
+                .setAutoCancel(false)
+                .setContentText("ALERT!!! One of your family members may have fallen!");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel =
                     new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_LOW);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n")
-                .setContentText("Fuego Aider")
-                .setSmallIcon(R.drawable.icon)
-                .setAutoCancel(false)
-                .setContentText("ALERT!!! One of your family members may have fallen!");
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(999, builder.build());
