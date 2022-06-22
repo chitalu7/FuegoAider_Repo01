@@ -10,5 +10,6 @@
         android:fontFamily="@font/custom_font"
         android:textSize="8pt"
 
+
         android:paddingTop="10dip" android:paddingBottom="10dip"/>
 </LinearLayout>

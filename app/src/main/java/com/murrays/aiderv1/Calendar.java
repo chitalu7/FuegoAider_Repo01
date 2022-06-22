@@ -124,7 +124,7 @@ public class Calendar extends AppCompatActivity{
 
         // Show user Latest Calendar items
         final ListView listView = (ListView) findViewById(R.id.calendar_recent_calview);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout, R.id.text1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_layout_calendar, R.id.text1);
         listView.setAdapter(adapter);
 
 
@@ -166,7 +166,9 @@ public class Calendar extends AppCompatActivity{
         Intent intent = new Intent(Calendar.this,CalendarActivity.class);
         intent.putExtra("date", date);
         startActivity(intent);
+        Log.i("datechecker",intent.toString());
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,7 +187,9 @@ public class Calendar extends AppCompatActivity{
     private void loadHomeView(){
         startActivity(new Intent(Calendar.this, MainActivity.class));
     }
-
+    private void loadCalendarView() {
+        startActivity(new Intent(Calendar.this, Calendar.class));
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -201,7 +205,9 @@ public class Calendar extends AppCompatActivity{
         if (id == R.id.action_home) {
             loadHomeView();
         }
-
+        if (id == R.id.action_calendar) {
+            loadCalendarView();
+        }
 
 
         return super.onOptionsItemSelected(item);
