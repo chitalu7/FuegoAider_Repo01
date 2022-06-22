@@ -187,6 +187,12 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gotoNextPage((String)listView.getItemAtPosition(position),current_date);
+            }
+        });
+
 
 
         ImageButton imageButton= findViewById(R.id.button2);

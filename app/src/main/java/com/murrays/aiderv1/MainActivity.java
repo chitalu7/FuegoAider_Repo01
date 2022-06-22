@@ -3,12 +3,14 @@ package com.murrays.aiderv1;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
@@ -42,7 +44,11 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 
@@ -82,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private Sensor mAccelerometer;
     private double accelerationCurrentValue;
     private double accelerationPreviousValue;
+    private static boolean activityVisible = true;
     TextView txtAcceleration;  //, txtCurrent, txtPrev;
     //private String mFamilyID;
 
@@ -101,34 +108,13 @@ public class MainActivity extends AppCompatActivity {
             double changeInAcceleration = Math.abs(accelerationCurrentValue - accelerationPreviousValue);
             accelerationPreviousValue = accelerationCurrentValue;
 
-            //txtCurrent.setText("Current = " + /*(int)*/accelerationCurrentValue);
-            //txtPrev.setText(("Prev = " + /*(int)*/accelerationPreviousValue));
 
-            //txtAcceleration.setText("Acceleration change = " + /*(int)*/changeInAcceleration);
-
-            if(changeInAcceleration > 12) {
-                //txtAcceleration.setBackgroundColor(Color.RED);
+            if(changeInAcceleration > 10) {
                 sendNotificationToDB();
 
             }
-            else if (changeInAcceleration > 5) {
-                //txtAcceleration.setBackgroundColor(Color.BLUE);
-            }
-            else if(changeInAcceleration > 2) {
-                //txtAcceleration.setBackgroundColor(Color.GREEN);
-            }
 
-           /* txtAcceleration.setText("Acceleration change = " + *//*(int)*//*changeInAcceleration);
 
-            if(changeInAcceleration > 12) {
-                txtAcceleration.setBackgroundColor(Color.RED);
-            }
-            else if (changeInAcceleration > 5) {
-                txtAcceleration.setBackgroundColor(Color.BLUE);
-            }
-            else if(changeInAcceleration > 2) {
-                txtAcceleration.setBackgroundColor(Color.GREEN);
-            }*/
         }
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {
@@ -142,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         // Initialize Firebase Auth and Database Reference
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -153,38 +141,12 @@ public class MainActivity extends AppCompatActivity {
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         startLocationService();
-//        startLocationService();
-       /* findViewById(R.id.buttonStartLocationUpdates).setOnClickListener(new View.OnClickListener() {
-            //start
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(
-                        getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            REQUEST_CODE_LOCATION_PERMISSION
-                    );
-                } else {
-                    startLocationService();
-                }
-            }
-        });
 
-            findViewById(R.id.buttonStopLocationUpdates).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick (View v){
-                    stopLocationService();
-                }
-            });
-*/
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
             loadLogInView();
         } else {
             String mUserId = mFirebaseUser.getUid();
-
             mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -200,59 +162,84 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-          /*  final ListView listView = (ListView) findViewById(R.id.calendar_recent);
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
-            listView.setAdapter(adapter);
-
-            mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        String dateKey = child.getKey();
-
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm", Locale.US);
-                        Date thisEventDate = new Date();
-                        if(dateKey != null){
-                            try {
-                                thisEventDate = simpleDateFormat.parse(dateKey);
-                            }catch(Exception e){
-                                Log.i("TAG", e.getMessage());
-                            }
-                        }
-                        String niceDate = String.valueOf(thisEventDate);
-                        String addme = "Date: "+niceDate + "  Event: "+ child.child("Description").getValue(String.class);
-                        adapter.add(addme);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });*/
-
             final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
             listView2.setAdapter(adapter);
+            String [] ids = new String[4];
 
-            mDatabase.child("family").child("familyID").child("55").child("Notifications").addValueEventListener(new ValueEventListener() {
+            mDatabase.child("family").child("familyID").child("55").child("Notifications").limitToLast(3).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    int num = 0;
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        // Get only to 5 records from notifications node
-                        if(num <6) {
-                            String addme = child.child("NotificationText").getValue(String.class);
-                            adapter.add(addme);
-                            num++;
-                        }
+
+                        String addme = child.child("NotificationText").getValue(String.class);
+                        adapter.add(addme);
+
+
                     }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+            // Only run the listener if we are on this activity currently
+            if(isActivityVisible()){
+                listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        mDatabase.child("family").child("familyID").child("55").child("Notifications").
+                                limitToLast(3).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot2) {
+                                for (DataSnapshot child2 : dataSnapshot2.getChildren()) {
+                                    if(child2.child("NotificationText").getValue(String.class).equals(listView2.getItemAtPosition(position)))
+                                    {
+                                        String locdata = child2.child("LogData").getValue(String.class);
+                                        try {
+                                            String[] coordinates = locdata.split("[,]", 0);
+                                            String longitude = coordinates[0];
+                                            String latitude = coordinates[1];
+                                            Uri gmmIntentUri = Uri.parse("geo:" + longitude + "," + latitude);
+                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                            mapIntent.setPackage("com.google.android.apps.maps");
+                                            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                                startActivity(mapIntent);
+                                            }
+                                        }catch (Exception e){
+                                            // This code will catch it if it's not a fall notification. This would be implemented differently in furture iterations.
+                                            Log.i("Error","This is not a fall notification, not going to maps");
+                                        }
+                                    }
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
+
+    /// Check if this is the current activity we are on
+
+    public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static void activityResumed() {
+        activityVisible = true;
+    }
+
+    public static void activityPaused() {
+        activityVisible = false;
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -290,14 +277,14 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Location service ", Toast.LENGTH_SHORT).show();
         }
     }
-//    private void stopLocationService() {
-//        if(isLocationServiceRunning()) {
-//            Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
-//            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_STOP_LOCATION_SERVICE);
-//            startService(intent);
-//            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    private void stopLocationService() {
+        if(isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
+            intent.setAction(com.murrays.aiderv1.Location.Constants.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
+        }
+    }
     //move into activities
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
@@ -320,12 +307,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_logout) {
-//            mFirebaseAuth.signOut();
-//            stopLocationService();
-//            loadLogInView();
-//        }
+
+        if (id == R.id.action_logout) {
+            mFirebaseAuth.signOut();
+            stopLocationService();
+            loadLogInView();
+        }
 
         if (id == R.id.action_calendar) {
             loadCalendarView();
@@ -347,19 +334,49 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
 
         java.util.Calendar calendar = java.util.Calendar.getInstance();
+        FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        String logData = "";
-        String notificationText = "A family member may have fallen. Please check in to see if they are okay";
-        String calendaritemDate = simpleDateFormat.format(calendar.getTime());
+        // Steph has edited the code to tell the person the name of the family member
 
-        logData = LocationService.getlatitudeAndLongitude();
+        String mUserId = mFirebaseUser.getUid();
 
-        String notID = mDatabase.child("family").child("familyID").child("55").child("Notifications").push().getKey();
-        mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("Time").setValue(calendaritemDate);
-        mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("NotificationText").setValue(notificationText);
-        mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("LogData").setValue(logData);
+        userFname = "John";
+/*
 
-        listenForDBChanges();
+        mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userFname = (String)dataSnapshot.child("FirstName").getValue();
+*/
+
+
+                String logData = "";
+                String notificationText = "Family member "+userFname+" may have fallen. Please click here to see their location";
+                String calendaritemDate = simpleDateFormat.format(calendar.getTime());
+
+                logData = LocationService.getlatitudeAndLongitude();
+
+                String notID = mDatabase.child("family").child("familyID").child("55").child("Notifications").push().getKey();
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("Time").setValue(calendaritemDate);
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("NotificationText").setValue(notificationText);
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("LogData").setValue(logData);
+
+                listenForDBChanges();
+
+/*
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.w("Error", "Failed to read value.", error.toException());
+            }
+        });
+
+
+
+*/
+
 
     }
 
@@ -370,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 pushNotification(previousChildName);
+               // finish();
             }
 
             @Override
