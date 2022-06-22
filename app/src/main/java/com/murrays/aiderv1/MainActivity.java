@@ -329,6 +329,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_calendar) {
             loadCalendarView();
         }
+        if (id == R.id.action_logout) {
+            mFirebaseAuth.signOut();
+            loadLogInView();
+        }
         return super.onOptionsItemSelected(item);
     }
     //2 methods to add -> onResume, onPause
