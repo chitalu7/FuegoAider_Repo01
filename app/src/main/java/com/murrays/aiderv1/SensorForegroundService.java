@@ -18,6 +18,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+//  This class is not currently being used
+
 public class SensorForegroundService extends Service implements SensorEventListener {
 
     // Sensor variables
@@ -42,7 +44,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
         }
     }
 
-
+// this method run when the sensor starts
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -63,7 +65,7 @@ public class SensorForegroundService extends Service implements SensorEventListe
                     }
                 }
         ).start();
-
+        // Create a push notifiation when the sensor service starts
         final String CHANNEL_ID = "Foreground Service ID";
         NotificationChannel channel = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

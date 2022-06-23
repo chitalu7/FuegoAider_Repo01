@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
     private double accelerationCurrentValue;
     private double accelerationPreviousValue;
     private static boolean activityVisible = true;
-    private static  boolean shouldrun = true;
+
 
 
     DatabaseReference mDatabase;
 
 
-
+    // Initiatialize  sensor event listener and then lsiten for changes
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent)
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             double changeInAcceleration = Math.abs(accelerationCurrentValue - accelerationPreviousValue);
             accelerationPreviousValue = accelerationCurrentValue;
 
-
+        // This code is commneted because tis was not trigerring with consistency. it does work sometimes.
             if(changeInAcceleration >12) {
                // sendNotificationToDB();
 
@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+    // TRigger all the code we want to run in the onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,22 +137,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Initialize Firebase Auth and Database Reference
+        // Initialize Firebase Auth and Database Reference, as well as sensormanager
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 
-        // Check if permission has been requested to share location
+
+
+
 
         if (mFirebaseUser == null) {
             // Not logged in, launch the Log In activity
             loadLogInView();
         } else {
-
+            // Check if permission has been requested to share location
             if (ContextCompat.checkSelfPermission(
                     getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED) {
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 startLocationService();
             }
-
+            // use a database listener to get user's name
             String mUserId = mFirebaseUser.getUid();
             mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -178,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("Error", "Failed to read value.", error.toException());
                 }
             });
+            // Add a listener to the sensor simulation  trigger button
             sensorTrigger.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-
+            // Go and populate the view with notifications
             populateListView();
 
             // Only run the listener if we are on this activity currently
@@ -195,13 +199,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateListView(){
 
+            // initialize listview object on main view
+
             final ListView listView2 = (ListView) findViewById(R.id.notifications_recent);
             final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
 
 
             listView2.setAdapter(adapter);
 
-
+            // Use a database listener to get the data
             mDatabase.child("family").child("familyID").child("55").child("Notifications").limitToLast(3).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -212,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-                    shouldrun = false;
                 }
 
                 @Override
@@ -220,11 +225,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            // check if Main acitivity is in the foreground before executing this code, I dont want it to trigger when someone adds a clendar item
 
             if(isActivityVisible()){
+
+                // Add an onclick listener to the listview
                 listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                       // create a database listener to populate the click link with the coordinates from the fall notification to go to google amps
                         mDatabase.child("family").child("familyID").child("55").child("Notifications").
                                 limitToLast(3).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -244,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(mapIntent);
                                             }
                                         }catch (Exception e){
-                                            // This code will catch it if it's not a fall notification. This would be implemented differently in furture iterations.
+                                            // This code will catch it if it's not a fall notification. This would be implemented differently in future iterations.
                                             Log.i("Error","This is not a fall notification, not going to maps");
                                         }
                                     }
@@ -277,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         activityVisible = false;
     }
 
-
+    // Check if permisson has been given for location sharing
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -289,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+        // Check if the location service is  running
 
     private boolean isLocationServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -308,6 +318,8 @@ public class MainActivity extends AppCompatActivity {
         private void runSensorTriggerEvent(){
         sendNotificationToDB();
     }
+
+    // Start the location service
     private void startLocationService() {
         if(!isLocationServiceRunning()) {
             Intent intent = new Intent(getApplication(), com.murrays.aiderv1.Location.LocationService.class);
@@ -316,6 +328,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Location service ", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // Stop the location service
+
     private void stopLocationService() {
         if(isLocationServiceRunning()) {
             Intent intent = new Intent(getApplicationContext(), com.murrays.aiderv1.Location.LocationService.class);
@@ -324,24 +339,25 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
         }
     }
-    //move into activities
+    //Create menu inflater
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+    // Menu method to go to login view
     private void loadLogInView() {
         Intent intent = new Intent(this, LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+    // Menu method to go calendar
     private void loadCalendarView() {
         startActivity(new Intent(MainActivity.this, Calendar.class));
     }
-
+  // Code to tell the menu what to do
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -369,25 +385,16 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mSensorManager.unregisterListener(sensorEventListener);
     }
-
+        // Method to send a notification to DB
     public void sendNotificationToDB() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
 
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        // Steph has edited the code to tell the person the name of the family member
-
         String mUserId = mFirebaseUser.getUid();
 
         userFname = "Stephanie";
-/*
-
-        mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userFname = (String)dataSnapshot.child("FirstName").getValue();
-*/
 
 
                 String logData = "";
@@ -395,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
                 String calendaritemDate = simpleDateFormat.format(calendar.getTime());
 
                 logData = LocationService.getlatitudeAndLongitude();
-
+                // Add the notificaton to DB
                 String notID = mDatabase.child("family").child("familyID").child("55").child("Notifications").push().getKey();
                 mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("Time").setValue(calendaritemDate);
                 mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("NotificationText").setValue(notificationText);
@@ -403,7 +410,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, "ALERT!!! One of your family members may have fallen!", Toast.LENGTH_SHORT).show();
 
+        // this code is commented out as it itsn't working with all the other functions combined
       // listenForDBChanges();
+
+       // Reset and make the listview again so that it doesn't duplicate
         final ListView listView3 = (ListView) findViewById(R.id.notifications_recent);
         final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.listview_layout, R.id.text1);
         listView3.setAdapter(adapter2);
@@ -420,20 +430,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-                shouldrun = false;
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-       // listenForDBChanges();
-
-
-/*
-
-            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
@@ -443,10 +441,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-*/
+
 
 
     }
+
+    // Method to listen for notification changes and send a push notification. Not being used right now
 
     private void listenForDBChanges(){
         mDatabase.child("family").child("familyID").child("55").child("Notifications").addChildEventListener(new ChildEventListener()
@@ -482,10 +482,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Method to send a push notification
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void pushNotification(String notID){
-
-
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n")
                 .setContentText("Fuego Aider")
@@ -503,8 +502,6 @@ public class MainActivity extends AppCompatActivity {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(999, builder.build());
     }
-
-
 
 
 

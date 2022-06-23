@@ -172,14 +172,13 @@ public class CalendarAddActivity extends AppCompatActivity {
         });
     };
 
+        // Add a notifcation to DB when calendat event is added
     private void addNotificationCalendar(String date, String descr){
 
 
 
         String mUserId = mFirebaseUser.getUid();
         String logData = "Event added by user: "+mUserId;
-
-
 
         mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
             @Override
@@ -214,21 +213,22 @@ public class CalendarAddActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+    // Menu method to go to login view
     private void loadLogInView() {
         Intent intent = new Intent(this, LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-
+    // menu method to go home
     private void loadHomeView(){
         startActivity(new Intent(CalendarAddActivity.this, MainActivity.class));
     }
+    // Menu method to go calendar
     private void loadCalendarView() {
         startActivity(new Intent(CalendarAddActivity.this, Calendar.class));
     }
-
+    // Code to tell the menu what to do
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

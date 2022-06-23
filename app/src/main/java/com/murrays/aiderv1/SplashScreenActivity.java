@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+
+// This code creates a splash screen that goes to the main activity afterward
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     Handler handler;

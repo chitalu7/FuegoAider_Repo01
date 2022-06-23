@@ -13,9 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aiderv1" >
-        <activity
-            android:name=".MeetupActivity"
-            android:exported="false" />
+
         <activity
             android:name=".CalendarActivity"
             android:theme="@style/Theme.Aiderv1.NoActionBar"

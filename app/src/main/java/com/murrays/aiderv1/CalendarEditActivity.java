@@ -57,6 +57,8 @@ public class CalendarEditActivity extends AppCompatActivity {
 
 
     }
+
+
         public void showEvent(){
 
             EditText eventDate = (EditText) findViewById(R.id.event_date) ;
@@ -77,6 +79,7 @@ public class CalendarEditActivity extends AppCompatActivity {
             String rTxt= txt.substring(23,txt.length());
 
 
+            // get the event details from the database to populate the edit form
 
             mDatabase.child("family").child("familyID").child("55").child("CalendarItems").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -90,9 +93,7 @@ public class CalendarEditActivity extends AppCompatActivity {
                         Log.i("MydateKey", rDate);
                         if (rDate.equals(current_date)) {
 
-                            //display the events for the day
-                            //  Log.i("Child node",(String)child.child("Description").getValue());
-                            //  String addme = "Date: " + current_date + "  Event: " + child.child("Description").getValue(String.class);
+
                             if (((String) child.child("Description").getValue()).equals(rTxt)) {
                                 String dd = dateKey.substring(0, 8);
                                 String tt = dateKey.substring(8, 12);
@@ -100,9 +101,6 @@ public class CalendarEditActivity extends AppCompatActivity {
                                 eventTime.setText(tt);
                                 eventDesc.setText((String) child.child("Description").getValue());
                                 eventNoes.setText((String) child.child("Notes").getValue());
-                                // eventDate.setTag(1,dateKey);
-
-                                //    Log.i("Foundit","Nice.");
 
 
                             }
@@ -117,9 +115,6 @@ public class CalendarEditActivity extends AppCompatActivity {
 
                     }
 
-                    //  String key = (String)eventDate.getTag(1);
-
-                    //  Log.i("Keykey",key);
 
                 }
 
@@ -132,6 +127,9 @@ public class CalendarEditActivity extends AppCompatActivity {
             });
 
         }
+
+        // Edit this event when user clicks edit
+
         public void EditEvent(String key){
             EditText eventDate = (EditText) findViewById(R.id.event_date) ;
             EditText eventTime = (EditText) findViewById(R.id.event_time) ;
@@ -201,7 +199,7 @@ public class CalendarEditActivity extends AppCompatActivity {
 
         }
 
-
+    //Create menu inflater
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,18 +207,18 @@ public class CalendarEditActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+    // Menu method to go to login view
     private void loadLogInView() {
         Intent intent = new Intent(this, LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-
+    // menu method to go home
     private void loadHomeView(){
         startActivity(new Intent(CalendarEditActivity.this, MainActivity.class));
     }
-
+    // Code for the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
