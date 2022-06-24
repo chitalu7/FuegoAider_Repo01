@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.murrays.aiderv1.Location.LocationService;
 
 import java.util.Random;
 import java.sql.Time;
@@ -59,8 +61,8 @@ public class CalendarAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_add_main);
-          mFirebaseAuth = FirebaseAuth.getInstance();
-          mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,7 +70,7 @@ public class CalendarAddActivity extends AppCompatActivity {
         eventTime = (EditText) findViewById(R.id.event_time);
         descriptionEvent = (EditText) findViewById(R.id.descript_textbox);
         notesEvent = (EditText) findViewById(R.id.notes_textbox);
-        addEventButton = (Button) findViewById(R.id.add_event_button);
+        ImageButton addEventButton = (ImageButton) findViewById(R.id.add_event_button);
 
         //Get date passed from previous page and populates the form
         Intent intent = getIntent();
@@ -108,29 +110,13 @@ public class CalendarAddActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mFamilyID = dataSnapshot.child("FamilyID").getValue(String.class);
 
-                           Log.i("Familyid", mFamilyID);
+
+                        Log.i("Familyid", mFamilyID);
                         mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Description").setValue(description);
                         mDatabase.child("family").child("familyID").child(mFamilyID).child("CalendarItems").child(newTime_dbKey).child("Notes").setValue(notes);
 
-                        Log.i("checkFamilyid", mFamilyID);
+                        addNotificationCalendar(newTime_dbKey,description);
 
-
-                        //                try {
-//                    Log.i("convert",convertTo24HoursFormat("12:00AM")); // 00:00
-//                } catch (ParseException ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//            // Replace with KK:mma if you want 0-11 interval
-//            private  final DateFormat TWELVE_TF = new SimpleDateFormat("hh:mma");
-//            // Replace with kk:mm if you want 1-24 interval
-//            private  final DateFormat TWENTY_FOUR_TF = new SimpleDateFormat("HH:mm");
-//
-//            public  String convertTo24HoursFormat(String twelveHourTime)
-//                    throws ParseException {
-//                return TWENTY_FOUR_TF.format(
-//                        TWELVE_TF.parse(twelveHourTime));
-//            }
 
                         // Create the object of
                         // AlertDialog Builder class
@@ -186,6 +172,42 @@ public class CalendarAddActivity extends AppCompatActivity {
         });
     };
 
+    private void addNotificationCalendar(String date, String descr){
+
+
+
+        String mUserId = mFirebaseUser.getUid();
+        String logData = "Event added by user: "+mUserId;
+
+
+
+        mDatabase.child("users").child(mUserId).child("profile").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String userFname = "";
+                userFname = (String) dataSnapshot.child("FirstName").getValue();
+                String notificationText = "Family member "+userFname+" has added '" + descr +"' to the calendar on "+date ;
+
+                String notID = mDatabase.child("family").child("familyID").child("55").child("Notifications").push().getKey();
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("Time").setValue(date);
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("NotificationText").setValue(notificationText);
+                mDatabase.child("family").child("familyID").child("55").child("Notifications").child(notID).child("LogData").setValue(logData);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.w("Error", "Failed to read value.", error.toException());
+            }
+        });
+
+
+
+
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -203,6 +225,9 @@ public class CalendarAddActivity extends AppCompatActivity {
     private void loadHomeView(){
         startActivity(new Intent(CalendarAddActivity.this, MainActivity.class));
     }
+    private void loadCalendarView() {
+        startActivity(new Intent(CalendarAddActivity.this, Calendar.class));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,6 +243,9 @@ public class CalendarAddActivity extends AppCompatActivity {
         }
         if (id == R.id.action_home) {
             loadHomeView();
+        }
+        if (id == R.id.action_calendar) {
+            loadCalendarView();
         }
 
 

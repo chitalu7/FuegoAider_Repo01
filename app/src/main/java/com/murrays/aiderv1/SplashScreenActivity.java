@@ -18,7 +18,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+<<<<<<< Updated upstream
                 Intent intent=new Intent(SplashScreenActivity.this,LogInActivity.class);
+=======
+                Intent intent=new Intent(SplashScreenActivity.this,MainActivity.class);
+>>>>>>> Stashed changes
                 startActivity(intent);
                 finish();
             }

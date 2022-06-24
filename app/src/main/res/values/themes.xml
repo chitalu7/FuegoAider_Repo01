@@ -3,7 +3,7 @@
     <style name="Theme.Aiderv1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/darkgreen_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimaryVariant">#039935</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -22,4 +22,27 @@
     <style name="Theme.Aiderv1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Aiderv1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Button.Green" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@android:color/holo_green_dark</item>
+    </style>
+
+        <!--add below code in themes.xml file-->
+        <!--below is the style for transparent activity and here we are using no action bar.-->
+        <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+            <!--on below line we are setting background as transparent color-->
+            <item name="android:background">@android:color/transparent</item>
+            <!--on below line we are displaying the windowNotitle as true as we are not displaying our status bar-->
+            <item name="android:windowNoTitle">true</item>
+            <!--on below line we are setting our window background as transparent color-->
+            <item name="android:windowBackground">@android:color/transparent</item>
+            <!--on below line we are setting color background cache hint as null-->
+            <item name="android:colorBackgroundCacheHint">@null</item>
+            <!--on below line we are adding a window translucent as true-->
+            <item name="android:windowIsTranslucent">true</item>
+            <!--on below line we are adding a window animationstyle-->
+            <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        </style>
+
+
 </resources>

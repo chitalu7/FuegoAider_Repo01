@@ -3,25 +3,31 @@ buildscript{
     ext.nav_version = "2.5.0-rc01"
     repositories {
         google()  // Google's Maven repository
+        jcenter()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.10'
         //classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0-rc01"
-       classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
 
     }
 
 }
 
 plugins {
-    id 'com.android.application' version '7.2.1' apply false
-    id 'com.android.library' version '7.2.1' apply false
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
 }
 
 allprojects {
     repositories {
-
+        mavenCentral()
+        jcenter()
         google()  // Google's Maven repository
+        maven { url 'https://jitpack.io' }
 
     }
 }
